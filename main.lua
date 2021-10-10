@@ -9,6 +9,14 @@ local sc,er = pcall(function()
         return CFrame.new(x,y,z)
     end
     
+    function notify(title,text)
+        CoreGui:SetCore("SendNotification", {
+    	    Title = title;
+    	    Text = text;
+        })
+    end
+
+        
     local function checkList(Part)
         for _,part in pairs(Ignored) do
             if Part.Name == part then
@@ -58,18 +66,23 @@ local sc,er = pcall(function()
         end
     end
     
+    notify("loaded","loaded")
+
     for _,folder in pairs(spawns:GetChildren()) do
         getItem(folder)
         for _,smol in pairs(folder:GetChildren()) do
             smol.ChildAdded:Connect(function(loc)
+                notify(loc.Name,"An item has been spawned")
                 getItem(loc.Parent.Parent)
             end)
         end
         folder.ChildAdded:Connect(function(loc)
             loc.ChildAdded:Connect(function(hi)
+                notify(loc.Name,"An item has been spawned")
                 getItem(hi.Parent.Parent)
             end)
         end)
     end
+    
 end)
 warn(sc,er)
